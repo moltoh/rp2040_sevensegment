@@ -41,8 +41,10 @@ void sevenseg_init(bool common_cathode) {
 void sevenseg_show(uint8_t val) {
     gpio_clr_mask(SEVENSEG_GPIO_PINS);
 
-    uint32_t lsd_mask = INT_GPIO_MAP[val % 10];
-    uint32_t msd_mask = INT_GPIO_MAP[val / 10];
+    bool too_big = val > 99;
+
+    uint32_t lsd_mask = INT_GPIO_MAP[too_big ? 9 : val % 10];
+    uint32_t msd_mask = INT_GPIO_MAP[too_big ? 9 : val / 10];
     
     gpio_put_masked(SEVENSEG_GPIO_PINS, (msd_mask << 7) | lsd_mask);
 }
